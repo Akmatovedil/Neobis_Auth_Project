@@ -1,11 +1,8 @@
 package com.example.Neobis_Auth_Project.service;
 
 import com.example.Neobis_Auth_Project.dto.RegistrationUserDto;
-import com.example.Neobis_Auth_Project.dto.UserDto;
 import com.example.Neobis_Auth_Project.entity.User;
-import com.example.Neobis_Auth_Project.exception.RecordNotFoundException;
 import com.example.Neobis_Auth_Project.repositories.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +17,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements UserDetailsService {
     private UserRepository userRepository;
     private RoleService roleService;
@@ -51,6 +47,7 @@ public class UserService implements UserDetailsService {
         User user = findByUsername(username).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("Пользователь '%s' не найден", username)
         ));
+
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),
@@ -62,6 +59,10 @@ public class UserService implements UserDetailsService {
         User user = new User();
         user.setUsername(registrationUserDto.getUsername());
         user.setEmail(registrationUserDto.getEmail());
+        user.setName(registrationUserDto.getName());
+        user.setSurname(registrationUserDto.getSurname());
+        user.setBirthdayDay(registrationUserDto.getBirthdayDay());
+        user.setPhoneNumber(registrationUserDto.getPhoneNumber());
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);

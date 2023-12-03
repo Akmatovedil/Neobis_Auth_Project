@@ -26,6 +26,10 @@ public class User {
     private String email;
     private String username;
     private String password;
+    private Boolean enabled = false;
+    private Boolean accountNonExpired = true;
+    private Boolean credentialsNonExpired = true;
+    private Boolean accountNonLocked = true;
     @ManyToMany
     @JoinTable(
             name = "users_roles",

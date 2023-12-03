@@ -6,10 +6,7 @@ import com.example.Neobis_Auth_Project.service.AuthService;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.Neobis_Auth_Project.config.SwaggerConfig.AUTH;
 
@@ -29,5 +26,11 @@ public class AuthController {
     @PostMapping("/registration")
     public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
         return authService.createNewUser(registrationUserDto);
+    }
+
+    @GetMapping("/activate")
+    public ResponseEntity<String> activateUserAccount(@RequestParam("token") String token) {
+        authService.activateUserByToken(token);
+        return ResponseEntity.ok("Активация аккаунта прошла успешно!");
     }
 }

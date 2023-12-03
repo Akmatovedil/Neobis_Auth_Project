@@ -34,8 +34,4 @@ public class MainController {
         return principal.getName();
     }
 
-    @GetMapping("/unsecured")
-    public String userData(){
-        return "Unsecured date";
-    }
 }
