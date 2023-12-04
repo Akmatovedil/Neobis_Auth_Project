@@ -32,10 +32,10 @@ public class AuthService {
     private final EmailService emailService;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest){
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
         }
 
@@ -43,20 +43,24 @@ public class AuthService {
 
         String token = jwtTokenUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
-
     }
 
-    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto){
-        if (userService.findByUsername(registrationUserDto.getUsername()).isPresent()){
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"),HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> createNewUser(@RequestBody RegistrationUserDto registrationUserDto) {
+        if (userRepository.findByUsername(registrationUserDto.getUsername()).isPresent()) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
         }
+        long countByEmail = userRepository.countByEmail(registrationUserDto.getEmail());
+        if (countByEmail > 0) {
+            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
+        }
+
         User user = userService.createNewUser(registrationUserDto);
         ActivationToken activationToken = activationTokenService.generateActivationToken(user);
         sendActivationEmail(user.getEmail(), activationToken.getToken());
 
         return ResponseEntity.ok(new UserDto(user.getId(), user.getUsername(), user.getEmail(), user.getBirthdayDay(), user.getPhoneNumber(), user.getSurname(), user.getName()));
-
     }
+
 
     public void activateUserByToken(String token) {
         Optional<ActivationToken> tokenOptional = activationTokenService.getActivationTokenByToken(token);

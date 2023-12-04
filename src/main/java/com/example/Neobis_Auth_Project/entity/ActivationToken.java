@@ -25,7 +25,7 @@ public class ActivationToken {
     @JoinColumn(name = "user_id")
     private User user;
     private LocalDateTime createdAt;
-    private LocalDateTime expiresAt;    
+    private LocalDateTime expiresAt;
 
     public ActivationToken(User user) {
         this.token = UUID.randomUUID().toString();

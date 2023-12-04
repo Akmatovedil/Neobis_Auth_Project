@@ -24,11 +24,6 @@ public class MainController {
         return "Secured date";
     }
 
-    @GetMapping("/admin")
-    public String adminData(){
-        return "Admin";
-    }
-
     @GetMapping("/info")
     public String userInfo(Principal principal){
         return principal.getName();
