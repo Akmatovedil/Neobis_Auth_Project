@@ -74,7 +74,7 @@ public class AuthService {
     }
 
     private void sendActivationEmail(String email, String token) {
-        String activationLink = "http://localhost:8081/auth/activate?token=" + token;
+        String activationLink = "http://164.90.185.42:8081/auth/activate?token=" + token;
         emailService.sendEmail(email, activationLink);
     }
 
