@@ -1,13 +1,8 @@
 package com.example.Neobis_Auth_Project.config;
 
-import com.example.Neobis_Auth_Project.entity.Role;
-import com.example.Neobis_Auth_Project.entity.User;
-import com.example.Neobis_Auth_Project.repositories.UserRepository;
 import com.example.Neobis_Auth_Project.service.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.DisabledException;
