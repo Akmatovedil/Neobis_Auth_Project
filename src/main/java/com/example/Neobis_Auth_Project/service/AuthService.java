@@ -49,11 +49,6 @@ public class AuthService {
         if (userRepository.findByUsername(registrationUserDto.getUsername()).isPresent()) {
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким именем уже существует"), HttpStatus.BAD_REQUEST);
         }
-        long countByEmail = userRepository.countByEmail(registrationUserDto.getEmail());
-        if (countByEmail > 0) {
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с таким email уже существует"), HttpStatus.BAD_REQUEST);
-        }
-
         User user = userService.createNewUser(registrationUserDto);
         ActivationToken activationToken = activationTokenService.generateActivationToken(user);
         sendActivationEmail(user.getEmail(), activationToken.getToken());
